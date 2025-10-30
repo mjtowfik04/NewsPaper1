@@ -190,7 +190,6 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 CORS_ALLOWED_ORIGINS = [
-   'https://dpi-news.vercel.app/api/',
-   'http://localhost:5173/'
-   
+    "http://localhost:5173",
+    "https://dpi-news.vercel.app",
 ]

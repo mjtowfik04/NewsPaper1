@@ -6,6 +6,8 @@ from News.paginations import DefaultPagination
 from api.permissons import IsStaffOrReadOnly
 from News.permissions import IsReviewAuthorOrReadonly
 from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import action
+from rest_framework.response import Response
 class NewsViewSet(ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
@@ -20,6 +22,13 @@ class CategoryViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [IsStaffOrReadOnly]
 
+    # Custom action: /categories/<id>/news/
+    @action(detail=True, methods=['get'])
+    def news(self, request, pk=None):
+        category = self.get_object()  # নির্দিষ্ট ক্যাটাগরি
+        news_qs = category.news.all()  # related_name='news' ব্যবহার করে সব News
+        serializer = NewsSerializer(news_qs, many=True, context={'request': request})
+        return Response(serializer.data)
 
 class ImageViewSet(ModelViewSet):
     serializer_class = ImageSerializer
