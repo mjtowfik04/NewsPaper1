@@ -26,6 +26,8 @@ AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
+    "corsheaders",
+
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,6 +52,8 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
