@@ -184,7 +184,6 @@ cloudinary.config(
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-https://dpi-news.vercel.app/api/
 
 CORS_ALLOWED_ORIGINS = [
    'https://dpi-news.vercel.app/api/',
