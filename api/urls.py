@@ -27,6 +27,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('', include(news_router.urls)),
     path('', include(category_router.urls)),  # <-- Category → News nested route
-    path('', include('djoser.urls')),
+    path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 ]
