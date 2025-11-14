@@ -53,6 +53,7 @@ MIDDLEWARE = [
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
+    
 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -193,3 +194,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://dpi-news.vercel.app",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
