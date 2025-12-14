@@ -175,7 +175,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+   'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
 }
 SWAGGER_SETTINGS = {
    'SECURITY_DEFINITIONS': {
@@ -215,4 +215,4 @@ CORS_ALLOWED_ORIGINS = [
     "https://dpi-news.vercel.app",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
