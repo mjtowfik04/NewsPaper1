@@ -36,15 +36,13 @@ class ImageViewSet(ModelViewSet):
     permission_classes = [IsStaffOrReadOnly]
 
     def get_queryset(self):
-        # Swagger schema generate করার সময় error এড়ানোর জন্য check
         if getattr(self, 'swagger_fake_view', False):
             return ImageModel.objects.none()
-
-        news_pk = self.kwargs.get('news_pk')
+        news_pk = self.kwargs['news_pk']  # ← nested router থেকে news_pk আসবে
         return ImageModel.objects.filter(news_id=news_pk)
 
     def perform_create(self, serializer):
-        news_pk = self.kwargs.get('news_pk')
+        news_pk = self.kwargs['news_pk']
         serializer.save(news_id=news_pk)
 
 class CommentView(ModelViewSet):

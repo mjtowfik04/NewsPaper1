@@ -7,6 +7,7 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageModel
         fields = ['id', 'image']
+        extra_kwargs = {'image': {'required': True}}
 
 class NewsSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()

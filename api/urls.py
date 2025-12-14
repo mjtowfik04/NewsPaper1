@@ -16,7 +16,8 @@ router.register(r'advertisements', AdvertisementviewSet, basename='advertisement
 
 # Nested routers for News
 news_router = NestedSimpleRouter(router, r'news', lookup='news')
-news_router.register(r'image', ImageViewSet, basename='news-image')
+# news_router.register(r'image', ImageViewSet, basename='news-image')
+news_router.register(r'images', ImageViewSet, basename='news-images')
 news_router.register(r'comments', CommentView, basename='news-comments')
 
 # Nested routers for Category → News
