@@ -4,6 +4,8 @@ from decouple import config
 import cloudinary
 from pathlib import Path
 from api.permissions import IsStaffOrReadOnly
+from datetime import timedelta
+
  
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -176,6 +178,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
+   'ACCESS_TOKEN_LIFETIME': timedelta(days=1),  # ৭ দিন (বা যত চাও)
+   'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
 }
 SWAGGER_SETTINGS = {
    'SECURITY_DEFINITIONS': {
