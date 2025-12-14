@@ -3,11 +3,12 @@ from .models import News, Category, Comment, Advertisement, ImageModel
 from .serializers import NewsSerializer, CategorySerializer, ImageSerializer,CommentSerializer,AdvertisementSerializer
 from rest_framework import filters
 from News.paginations import DefaultPagination
-from api.permissons import IsStaffOrReadOnly
+from api.permissions import IsStaffOrReadOnly
 from News.permissions import IsReviewAuthorOrReadonly
 from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
 class NewsViewSet(ModelViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
@@ -61,3 +62,5 @@ class AdvertisementviewSet(ModelViewSet):
     queryset=Advertisement.objects.all()
     serializer_class=AdvertisementSerializer
     permission_classes=[IsStaffOrReadOnly]
+
+
