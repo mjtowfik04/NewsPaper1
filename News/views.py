@@ -22,6 +22,8 @@ class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsStaffOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['category__id']  # ক্যাটাগরি আইডি দিয়ে সার্চ
 
     # Custom action: /categories/<id>/news/
     @action(detail=True, methods=['get'])
