@@ -1,66 +1,83 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import News, Category, Comment, Advertisement, ImageModel
-from .serializers import NewsSerializer, CategorySerializer, ImageSerializer,CommentSerializer,AdvertisementSerializer
 from rest_framework import filters
+from rest_framework.permissions import IsAuthenticated
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+from .models import News, Category, Comment, Advertisement, ImageModel
+from .serializers import (
+    NewsSerializer,
+    CategorySerializer,
+    ImageSerializer,
+    CommentSerializer,
+    AdvertisementSerializer,
+)
 from News.paginations import DefaultPagination
 from api.permissions import IsStaffOrReadOnly
 from News.permissions import IsReviewAuthorOrReadonly
-from rest_framework.permissions import IsAdminUser
-from rest_framework.decorators import action
-from rest_framework.response import Response
 
+
+
+# NEWS VIEWSET (CATEGORY FILTER FIXED)
 class NewsViewSet(ModelViewSet):
-    queryset = News.objects.all()
     serializer_class = NewsSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'category__name']
     pagination_class = DefaultPagination
     permission_classes = [IsStaffOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "category__name"]
+
+    def get_queryset(self):
+        queryset = News.objects.all()
+        category = self.request.query_params.get("category")
+
+        if category:
+            queryset = queryset.filter(category_id=category)
+
+        return queryset
 
 
+
+# CATEGORY VIEWSET
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsStaffOrReadOnly]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['category__id']  # ক্যাটাগরি আইডি দিয়ে সার্চ
 
-    # Custom action: /categories/<id>/news/
-    @action(detail=True, methods=['get'])
-    def news(self, request, pk=None):
-        category = self.get_object()  # নির্দিষ্ট ক্যাটাগরি
-        news_qs = category.news.all()  # related_name='news' ব্যবহার করে সব News
-        serializer = NewsSerializer(news_qs, many=True, context={'request': request})
-        return Response(serializer.data)
 
+# IMAGE VIEWSET
+@method_decorator(csrf_exempt, name="dispatch")
 class ImageViewSet(ModelViewSet):
     serializer_class = ImageSerializer
-    permission_classes = [IsStaffOrReadOnly]
+    permission_classes = [IsStaffOrReadOnly, IsAuthenticated]
 
     def get_queryset(self):
-        if getattr(self, 'swagger_fake_view', False):
+        if getattr(self, "swagger_fake_view", False):
             return ImageModel.objects.none()
-        news_pk = self.kwargs['news_pk']  # ← nested router থেকে news_pk আসবে
+
+        news_pk = self.kwargs.get("news_pk")
         return ImageModel.objects.filter(news_id=news_pk)
 
     def perform_create(self, serializer):
-        news_pk = self.kwargs['news_pk']
+        news_pk = self.kwargs.get("news_pk")
         serializer.save(news_id=news_pk)
 
+
+# COMMENT VIEWSET
 class CommentView(ModelViewSet):
-    serializer_class=CommentSerializer
+    serializer_class = CommentSerializer
     permission_classes = [IsReviewAuthorOrReadonly]
 
     def get_queryset(self):
-        news_pk = self.kwargs.get('news_pk')
+        news_pk = self.kwargs.get("news_pk")
         return Comment.objects.filter(news_id=news_pk)
+
     def perform_create(self, serializer):
-        news_id=self.kwargs['news_pk']
-        serializer.save(user=self.request.user,news_id=news_id)
+        news_pk = self.kwargs.get("news_pk")
+        serializer.save(user=self.request.user, news_id=news_pk)
 
+
+# ADVERTISEMENT VIEWSET
 class AdvertisementviewSet(ModelViewSet):
-    queryset=Advertisement.objects.all()
-    serializer_class=AdvertisementSerializer
-    permission_classes=[IsStaffOrReadOnly]
-
-
+    queryset = Advertisement.objects.all()
+    serializer_class = AdvertisementSerializer
+    permission_classes = [IsStaffOrReadOnly]
