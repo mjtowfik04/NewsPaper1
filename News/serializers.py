@@ -3,7 +3,7 @@ from News.models import Category, News, ImageModel,Comment,Advertisement
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description']  
+        fields = ['id', 'name']  
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
