@@ -10,51 +10,51 @@ class ImageSerializer(serializers.ModelSerializer):
         model = ImageModel
         fields = ['id','image']
 
-# class NewsSerializer(serializers.ModelSerializer):
-#     url = serializers.SerializerMethodField()  # <-- শুধুমাত্র এভাবেই
-#     image = ImageSerializer(many=True, read_only=True)  # যদি News এর অনেক image থাকে
-
-#     class Meta:
-#         model = News
-#         fields = ['id', 'title', 'content', 'category', 'url',
-#                   'image', 'is_featured', 'is_published', 'created_at', 'updated_at', 'published_at']
-
-#     def get_url(self, obj):
-#         request = self.context.get("request")
-#         return request.build_absolute_uri(f"/api/news/{obj.pk}/")
-    
 class NewsSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True)
-    category_id = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(),
-        source="category",
-        write_only=True
-    )
-    image = ImageSerializer(many=True, read_only=True)
-    url = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()  # <-- শুধুমাত্র এভাবেই
+    image = ImageSerializer(many=True, read_only=True)  # যদি News এর অনেক image থাকে
 
     class Meta:
         model = News
-        fields = [
-            'id',
-            'title',
-            'content',
-            'category',
-            'category_id',
-            'image',
-            'url',
-            'is_featured',
-            'is_published',
-            'created_at',
-            'updated_at',
-            'published_at'
-        ]
+        fields = ['id', 'title', 'content', 'category', 'url',
+                  'image', 'is_featured', 'is_published', 'created_at', 'updated_at', 'published_at']
 
     def get_url(self, obj):
         request = self.context.get("request")
-        if request:
-            return request.build_absolute_uri(f"/api/news/{obj.pk}/")
-        return f"/api/news/{obj.pk}/"
+        return request.build_absolute_uri(f"/api/news/{obj.pk}/")
+    
+# class NewsSerializer(serializers.ModelSerializer):
+#     category = CategorySerializer(read_only=True)
+#     category_id = serializers.PrimaryKeyRelatedField(
+#         queryset=Category.objects.all(),
+#         source="category",
+#         write_only=True
+#     )
+#     image = ImageSerializer(many=True, read_only=True)
+#     url = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = News
+#         fields = [
+#             'id',
+#             'title',
+#             'content',
+#             'category',
+#             'category_id',
+#             'image',
+#             'url',
+#             'is_featured',
+#             'is_published',
+#             'created_at',
+#             'updated_at',
+#             'published_at'
+#         ]
+
+#     def get_url(self, obj):
+#         request = self.context.get("request")
+#         if request:
+#             return request.build_absolute_uri(f"/api/news/{obj.pk}/")
+#         return f"/api/news/{obj.pk}/"
 
 
 
