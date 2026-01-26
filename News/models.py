@@ -23,7 +23,7 @@ class News(models.Model):
         related_name='news'
     )
     is_featured = models.BooleanField(default=False)
-    is_published = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     published_at = models.DateTimeField(blank=True, null=True)
